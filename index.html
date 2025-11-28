@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tienda P&P</title>
+
+ 
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    :root{
+      --primary:#0d6efd;
+      --accent:#ff7b00;
+      --bg:#f8f9fa;
+      --card-shadow: 0 6px 18px rgba(13,110,253,0.06);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    body{background:var(--bg);}
+    header[role="banner"]{background:white;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+    .product-card{border:0;border-radius:14px;box-shadow:var(--card-shadow);}
+    .product-img{height:180px;object-fit:contain}
+    .btn-round{border-radius:10px}
+    .cart-badge{position:absolute;top:6px;right:6px;font-size:.7rem}
+    .offcanvas-cart .product-row{border-bottom:1px solid #e9ecef;padding:12px 0}
+    .sr-only{position:absolute;left:-10000px;}
+
+
+    .product-img-wrapper {
+      width: 100%;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .product-img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    @media (min-width:1200px){
+      .product-img-wrapper {
+        height: 200px;
+      }
+    }
+
+
+    
+    @media (min-width:1200px){
+      .product-img{height:200px}
+    }
+    
+
+    .modal-img-wrapper {
+    width: 100%;
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    }
+
+    .modal-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    }
+
+
+  </style>
+</head>
+<body>
+  <header role="banner">
+    <nav class="navbar navbar-expand-lg container py-3">
+      <a class="navbar-brand fw-bold" href="#">Tienda P&P</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Alternar navegación">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="#">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#productos">Productos</a></li>
+        </ul>
+
+        <form class="d-flex me-3" role="search" onsubmit="return false;">
+          <label for="search" class="sr-only">Buscar productos</label>
+          <input id="search" class="form-control me-2" type="search" placeholder="Buscar producto" aria-label="Buscar" />
+        </form>
+
+        <div class="position-relative">
+          <button id="openCartBtn" class="btn btn-outline-primary btn-round" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas" aria-label="Abrir carrito">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1 .485.379L2.89 5H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 14H4a.5.5 0 0 1-.491-.408L1.01 2H.5a.5.5 0 0 1-.5-.5zM5 12a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm6 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+            </svg>
+            <span id="cartCount" class="badge bg-danger cart-badge rounded-pill">0</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" class="container my-4" role="main">
+    <section class="mb-4">
+      <div class="p-4 bg-white rounded-3">
+        <h1 class="h4">Catálogo de productos</h1>
+        
+      </div>
+    </section>
+
+    <section id="productos" aria-labelledby="productos-title">
+      <h2 id="productos-title" class="h5 mb-3 visually-hidden">Productos</h2>
+      <div id="productsRow" class="row g-3" aria-live="polite">
+      </div>
+    </section>
+  </main>
+
+
+  <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="productModalLabel" class="modal-title">Detalles</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-5 d-flex align-items-center justify-content-center">
+                <div class="modal-img-wrapper">
+                    <img id="modalImage" src="" alt="Imagen del producto" class="modal-img" />
+                </div>
+            </div>
+            <div class="col-md-7">
+              <h3 id="modalTitle" class="h6"></h3>
+              <p id="modalDesc" class="text-muted"></p>
+              <p class="fw-bold">$ <span id="modalPrice"></span></p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="modalAddBtn" class="btn btn-primary">Agregar al carrito</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="offcanvas offcanvas-end offcanvas-cart" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+    <div class="offcanvas-header">
+      <h5 id="cartOffcanvasLabel">Tu carrito</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+      <div id="cartList" class="mb-3" role="list">
+        
+      </div>
+
+      <div class="mt-auto">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <strong>Total:</strong>
+          <strong>$ <span id="cartTotal">0.00</span></strong>
+        </div>
+        <div class="d-flex gap-2">
+          <button id="clearCartBtn" class="btn btn-outline-danger w-100">Vaciar carrito</button>
+          <button id="checkoutBtn" class="btn btn-success w-100">Finalizar compra</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer role="contentinfo" class="text-center py-4 mt-4 bg-white">
+    <div class="container"></div>
+  </footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
