@@ -1,5 +1,5 @@
 
-# 🛍️ Tienda P&P — Proyecto Ecommerce en HTML, CSS y JavaScript
+# 🛍️ Tienda P&P — Proyecto E-commerce en HTML, CSS y JavaScript
 
 ![HTML5](https://img.shields.io/badge/HTML5-E44D26?logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
@@ -13,7 +13,7 @@ Este proyecto es una tienda online sencilla, desarrollada utilizando tecnología
 Incluye carrito funcional, buscador instantáneo, modales, offcanvas y persistencia en LocalStorage.
 
 ---
-### **URL de E-commerce: http://127.0.0.1:5501/index.html** 
+### **URL de E-commerce: https://axvenicuz.github.io/Laboratorio-de-aplicaciones-web-cliente-E-commerce/** 
 ---
 
 ## 👥 Autores
@@ -99,4 +99,5 @@ Responsable de:
 - Integración de pagos (MercadoPago / Stripe)
 
 ---
-
+## 📝 Licencia
+- Proyecto de práctica — uso libre educativo. 
